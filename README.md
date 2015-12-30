@@ -1,6 +1,14 @@
-# formgen_v1.0 : Dynamically Generate HTML Forms
+# FormGenLib
+Automatically Generate awesome looking HTML form using minimal JSON options (theme Bootstrap v3)
 
-## Input Types 
+____
+> DEMO 
+https://github.com/shishtpal/FormGenLib.git
+
+# formgen_v1.0 : Dynamically Generate HTML Forms
+____
+
+### Input Types 
 general 
 checkbox
 file
@@ -128,33 +136,6 @@ i.config(form);
 i.injectFormCompAsNew();
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
