@@ -3,7 +3,7 @@ Automatically Generate awesome looking HTML form using minimal JSON options (the
 
 ____
 > DEMO 
-https://github.com/shishtpal/FormGenLib.git
+https://shishtpal.github.io/formgenlib/
 
 # formgen_v1.0 : Dynamically Generate HTML Forms
 ____
