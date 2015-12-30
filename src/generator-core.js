@@ -11,6 +11,7 @@ var _label = (label)?(label):("__LABEL__");
 var _label_class = (label_class)?(label_class):("");
 var _type = (type)?(type):("__TYPE__");
 var _name = (name)?(name):("__NAME__");
+var _title = (title)?(title):("");
 var _value = (value)?(value):("");
 var _style = (style)?(' style="' + style + '" '):("");
 var _placeholder = (placeholder)?(' placeholder="' + placeholder + '" '):("");
@@ -23,6 +24,8 @@ var _control_id0 = (control_id)?("#" + control_id):("");
 var _class=_control_class;
 if (_type=="text") { 
 _class += " form-control text";
+} else if (_type =="general") {
+_class+=" ";
 } else if (_type =="file") {
 _class+=" form-control file";
 } else if (_type == "checkbox") {
@@ -77,6 +80,52 @@ __p+='\n    ';
 __p+='\n    <input type="'+
 ((__t=( _type ))==null?'':__t)+
 '" class="'+
+((__t=( _class ))==null?'':__t)+
+' '+
+((__t=( _control_grid ))==null?'':__t)+
+'" '+
+((__t=( _control_id ))==null?'':__t)+
+' name="'+
+((__t=( _name ))==null?'':__t)+
+'" value="'+
+((__t=( _value ))==null?'':__t)+
+'" '+
+((__t=( _placeholder ))==null?'':__t)+
+' '+
+((__t=( _autocomplete ))==null?'':__t)+
+' '+
+((__t=( _style ))==null?'':__t)+
+'>\n\n';
+ // General Control - When You need a Custom Type Input Control 
+__p+='\n';
+ } else if (_type == "general") { 
+__p+='\n    ';
+ var _type_name = (type_name)?(' type="' + type_name + '" '):(' type="text" '); 
+__p+='\n    ';
+ var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" '); 
+__p+='\n    <input type="'+
+((__t=( _type_name ))==null?'':__t)+
+'" class="'+
+((__t=( _class ))==null?'':__t)+
+' '+
+((__t=( _control_grid ))==null?'':__t)+
+'" '+
+((__t=( _control_id ))==null?'':__t)+
+' name="'+
+((__t=( _name ))==null?'':__t)+
+'" value="'+
+((__t=( _value ))==null?'':__t)+
+'" '+
+((__t=( _placeholder ))==null?'':__t)+
+' '+
+((__t=( _autocomplete ))==null?'':__t)+
+' '+
+((__t=( _style ))==null?'':__t)+
+'>\n\n';
+ } else if (_type == "password") { 
+__p+='\n    ';
+ var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" '); 
+__p+='\n    <input type="password" class="'+
 ((__t=( _class ))==null?'':__t)+
 ' '+
 ((__t=( _control_grid ))==null?'':__t)+
@@ -248,20 +297,20 @@ __p+='\n';
  } else if (_type == "photo") { 
 __p+='\n    ';
 
-    var _img_id = (img_id)?(' id="' + img_id + "' "):("");
+    var _img_id = (img_id)?(' id="' + img_id + '" '):("");
     var _img_id0 = (img_id)?("#" + img_id):("");
-    var _img_alt = (img_alt)?(' alt="' + img_alt + "' "):("");
-    var _img_style = (img_style)?(' style="' + img_style + "' "):("");
-    var _img_default = (img_default)?(' src="' + img_default + "' "):("");
+    var _img_alt = (img_alt)?(' alt="' + img_alt + '" '):("");
+    var _img_style = (img_style)?(' style="' + img_style + '" '):("");
+    var _img_default = (img_default)?(' src="' + img_default + '" '):("");
     
 __p+='\n    <div class="thumbnail">\n        <img class="img-thumbnail" '+
 ((__t=( _img_id ))==null?'':__t)+
 ' '+
 ((__t=( _img_default ))==null?'':__t)+
 ' data-src="holder.js/300x300" '+
-((__t=( img_alt ))==null?'':__t)+
+((__t=( _img_alt ))==null?'':__t)+
 ' '+
-((__t=( img_style ))==null?'':__t)+
+((__t=( _img_style ))==null?'':__t)+
 '>\n        <div class="caption '+
 ((__t=( _control_grid ))==null?'':__t)+
 '">\n            <input name="'+

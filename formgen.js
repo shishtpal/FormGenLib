@@ -35,25 +35,32 @@ GenerateForm.prototype = {
 	/* reset all properties */
 	clean: function() {
 		// Properties ..
-		this.label = "";
-		this.label_class = "";
-		this.label_grid = [];
-		this.control_grid = [];
 		this.cont_grid = [];
 		this.cont_class = "";
 		this.cont_style = "";
+		// Label Properties
+		this.label = "";
+		this.label_class = "";
+		this.label_grid = [];
+		// Input Control Properties
+		this.control_grid = [];
 		this.control_class = "";
+		this.title = "";
 		this.control_id = "";
 		this.type = "";
+		this.type_name = "";
 		this.name = "";
 		this.value = "";
 		this.style = "";
-		this.rows = "";
 		this.autocomplete = "";
 		this.placeholder = "";
+		// textarea Control 
+		this.rows = "";
 		this.multiple = "";
+		// select Control
 		this.items = [];
-		this.values = []; // used for list widget
+		// used for list widget
+		this.values = []; 
 		// photo widget options
 	    this.img_default= "";
 	    this.img_alt= "";
@@ -150,11 +157,10 @@ GenerateForm.prototype = {
     /* Underscore - pre-compiled Template */
     generate: function() {
     	var obj = this;
+
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
 __p+='';
- 
-
 var _cont_grid = (cont_grid)?(this.generateGridClass(cont_grid)):("");
 var _cont_class = (cont_class)?(cont_class):("");
 var _cont_style = (cont_style)?(' style="' + cont_style + '" '):("");
@@ -162,6 +168,7 @@ var _label = (label)?(label):("__LABEL__");
 var _label_class = (label_class)?(label_class):("");
 var _type = (type)?(type):("__TYPE__");
 var _name = (name)?(name):("__NAME__");
+var _title = (title)?(title):("");
 var _value = (value)?(value):("");
 var _style = (style)?(' style="' + style + '" '):("");
 var _placeholder = (placeholder)?(' placeholder="' + placeholder + '" '):("");
@@ -174,6 +181,8 @@ var _control_id0 = (control_id)?("#" + control_id):("");
 var _class=_control_class;
 if (_type=="text") { 
 _class += " form-control text";
+} else if (_type =="general") {
+_class+=" ";
 } else if (_type =="file") {
 _class+=" form-control file";
 } else if (_type == "checkbox") {
@@ -228,6 +237,52 @@ __p+='\n    ';
 __p+='\n    <input type="'+
 ((__t=( _type ))==null?'':__t)+
 '" class="'+
+((__t=( _class ))==null?'':__t)+
+' '+
+((__t=( _control_grid ))==null?'':__t)+
+'" '+
+((__t=( _control_id ))==null?'':__t)+
+' name="'+
+((__t=( _name ))==null?'':__t)+
+'" value="'+
+((__t=( _value ))==null?'':__t)+
+'" '+
+((__t=( _placeholder ))==null?'':__t)+
+' '+
+((__t=( _autocomplete ))==null?'':__t)+
+' '+
+((__t=( _style ))==null?'':__t)+
+'>\n\n';
+ // General Control - When You need a Custom Type Input Control 
+__p+='\n';
+ } else if (_type == "general") { 
+__p+='\n    ';
+ var _type_name = (type_name)?(' type="' + type_name + '" '):(' type="text" '); 
+__p+='\n    ';
+ var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" '); 
+__p+='\n    <input type="'+
+((__t=( _type_name ))==null?'':__t)+
+'" class="'+
+((__t=( _class ))==null?'':__t)+
+' '+
+((__t=( _control_grid ))==null?'':__t)+
+'" '+
+((__t=( _control_id ))==null?'':__t)+
+' name="'+
+((__t=( _name ))==null?'':__t)+
+'" value="'+
+((__t=( _value ))==null?'':__t)+
+'" '+
+((__t=( _placeholder ))==null?'':__t)+
+' '+
+((__t=( _autocomplete ))==null?'':__t)+
+' '+
+((__t=( _style ))==null?'':__t)+
+'>\n\n';
+ } else if (_type == "password") { 
+__p+='\n    ';
+ var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" '); 
+__p+='\n    <input type="password" class="'+
 ((__t=( _class ))==null?'':__t)+
 ' '+
 ((__t=( _control_grid ))==null?'':__t)+
@@ -473,7 +528,7 @@ __p+='\n    <div class="'+
  // Submit Button 
 __p+='\n';
  } else if (_type == "submit") { 
- 	    var _value = (value != "")?(value):("Submit");
+ 	var _value = (value)?(value):("Submit");
 __p+='\n    <input class="'+
 ((__t=( _class ))==null?'':__t)+
 '" type="submit" name="'+
