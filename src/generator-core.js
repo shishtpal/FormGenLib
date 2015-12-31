@@ -11,15 +11,16 @@ var _label = (label)?(label):("__LABEL__");
 var _label_class = (label_class)?(label_class):("");
 var _type = (type)?(type):("__TYPE__");
 var _name = (name)?(name):("__NAME__");
-var _title = (title)?(title):("");
-var _value = (value)?(value):("");
-var _style = (style)?(' style="' + style + '" '):("");
+var _title = (title)?(' title="'+title+'" '):("");
+var _value = (value)?(' value="'+value+'" '):("");
+var _value0 = (value)?(value):("");
+var _style = (style)?(' style="'+style+'" '):("");
 var _placeholder = (placeholder)?(' placeholder="' + placeholder + '" '):("");
 var _label_grid = (label_grid)?( this.generateGridClass(label_grid) ):("");
 var _control_grid = (control_grid)?( this.generateGridClass(control_grid) ):("");
 var _control_class = (control_class)?(control_class):("");
-var _control_id = (control_id)?(' id="' + control_id + '" '):("");
-var _control_id0 = (control_id)?("#" + control_id):("");
+var _control_id = (control_id)?(' id="'+control_id+'" '):("");
+var _control_id0 = (control_id)?("#"+control_id):("");
 
 var _class=_control_class;
 if (_type=="text") { 
@@ -64,10 +65,8 @@ __p+='\n';
 __p+='\n    <label for="'+
 ((__t=( _name ))==null?'':__t)+
 '" class="control-label '+
-((__t=( _label_class ))==null?'':__t)+
-' '+
-((__t=( _label_grid ))==null?'':__t)+
-'">'+
+((__t=( _label_class + _label_grid ))==null?'':__t)+
+'"> '+
 ((__t=( _label ))==null?'':__t)+
 '</label>\n';
  } 
@@ -76,7 +75,19 @@ __p+='\n\n';
 __p+='\n';
  if (_type == "text" || _type == "file" || _type == "radio" || _type == "checkbox") { 
 __p+='\n    ';
- var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" '); 
+ 
+    var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" ');
+    if (_type == "text") {
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.value);" onload="this.value=this.getAttribute(`data-value`);" '); 
+    } else if (_type == "radio") {
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.checked);" onload="var _val=this.getAttribute(`data-value`);this.checked=(_val && _val == `true`)?(true):(false);" '); 
+    } else if (_type == "checkbox") {
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.checked);" onload="var _val=this.getAttribute(`data-value`);this.checked=(_val && _val == `true`)?(true):(false);" '); 
+    } else {
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(''); 
+    }
+
+    
 __p+='\n    <input type="'+
 ((__t=( _type ))==null?'':__t)+
 '" class="'+
@@ -84,25 +95,22 @@ __p+='\n    <input type="'+
 ' '+
 ((__t=( _control_grid ))==null?'':__t)+
 '" '+
-((__t=( _control_id ))==null?'':__t)+
+((__t=( _control_id + _onchange ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
 ' name="'+
 ((__t=( _name ))==null?'':__t)+
-'" value="'+
-((__t=( _value ))==null?'':__t)+
 '" '+
-((__t=( _placeholder ))==null?'':__t)+
-' '+
-((__t=( _autocomplete ))==null?'':__t)+
-' '+
-((__t=( _style ))==null?'':__t)+
+((__t=( _value + _placeholder + _autocomplete + _style ))==null?'':__t)+
 '>\n\n';
  // General Control - When You need a Custom Type Input Control 
 __p+='\n';
  } else if (_type == "general") { 
 __p+='\n    ';
- var _type_name = (type_name)?(' type="' + type_name + '" '):(' type="text" '); 
-__p+='\n    ';
- var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" '); 
+ 
+    var _type_name = (type_name)?(' type="' + type_name + '" '):(' type="text" ');
+    var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" ');
+    
 __p+='\n    <input type="'+
 ((__t=( _type_name ))==null?'':__t)+
 '" class="'+
@@ -111,16 +119,12 @@ __p+='\n    <input type="'+
 ((__t=( _control_grid ))==null?'':__t)+
 '" '+
 ((__t=( _control_id ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
 ' name="'+
 ((__t=( _name ))==null?'':__t)+
-'" value="'+
-((__t=( _value ))==null?'':__t)+
 '" '+
-((__t=( _placeholder ))==null?'':__t)+
-' '+
-((__t=( _autocomplete ))==null?'':__t)+
-' '+
-((__t=( _style ))==null?'':__t)+
+((__t=( _value + _placeholder + _autocomplete + _style ))==null?'':__t)+
 '>\n\n';
  } else if (_type == "password") { 
 __p+='\n    ';
@@ -131,22 +135,21 @@ __p+='\n    <input type="password" class="'+
 ((__t=( _control_grid ))==null?'':__t)+
 '" '+
 ((__t=( _control_id ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
 ' name="'+
 ((__t=( _name ))==null?'':__t)+
-'" value="'+
-((__t=( _value ))==null?'':__t)+
 '" '+
-((__t=( _placeholder ))==null?'':__t)+
-' '+
-((__t=( _autocomplete ))==null?'':__t)+
-' '+
-((__t=( _style ))==null?'':__t)+
+((__t=( _value + _placeholder + _autocomplete + _style ))==null?'':__t)+
 '>\n\n';
  // Textarea widget 
 __p+='\n';
  } else if (_type == "textarea") { 
 __p+='\n    ';
- var _rows = (rows)?(' rows="' + rows + '" '):(' rows="5" '); 
+ 
+    var _rows = (rows)?(' rows="' + rows + '" '):(' rows="5" '); 
+    var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.value);" onload="this.value=this.getAttribute(`data-value`);" '); 
+    
 __p+='\n    <textarea class="'+
 ((__t=( _class ))==null?'':__t)+
 ' '+
@@ -154,13 +157,7 @@ __p+='\n    <textarea class="'+
 '" name="'+
 ((__t=( _name ))==null?'':__t)+
 '" '+
-((__t=( _control_id ))==null?'':__t)+
-' '+
-((__t=( _rows ))==null?'':__t)+
-' '+
-((__t=( _placeholder ))==null?'':__t)+
-' '+
-((__t=( _style ))==null?'':__t)+
+((__t=( _control_id + _title + _rows + _placeholder + _style + _onchange ))==null?'':__t)+
 '>'+
 ((__t=( _value ))==null?'':__t)+
 '</textarea>\n\n';
@@ -168,9 +165,11 @@ __p+='\n    <textarea class="'+
 __p+='\n';
  } else if (_type == "select") { 
 __p+='\n    ';
- var _multiple = (multiple)?('multiple="true"'):(""); 
-__p+='\n    ';
- var _items = (items)?(items):([]); 
+ 
+    var _multiple = (multiple)?('multiple="true"'):("");
+    var _items = (items)?(items):([]);
+    var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.value);" onload="this.value=this.getAttribute(`data-value`);" ');
+    
 __p+='\n\n    <select name="'+
 ((__t=( _name ))==null?'':__t)+
 '" class="'+
@@ -178,33 +177,34 @@ __p+='\n\n    <select name="'+
 ' '+
 ((__t=( _control_grid ))==null?'':__t)+
 '" '+
+((__t=( _onchange ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
+' '+
 ((__t=( _control_id ))==null?'':__t)+
 ' '+
 ((__t=( _style ))==null?'':__t)+
 ' '+
 ((__t=( _multiple ))==null?'':__t)+
 '>\n    ';
- for(var count=0;count<_items.length;count++) { 
-__p+='\n    ';
- var item = _items[count]; 
-__p+='\n    ';
- if (item[0] == "_" && item != "_") { 
-__p+='\n    ';
- var _item = item.substr(1); 
+ 
+    for(var count=0;count<_items.length;count++) {
+        var item = _items[count];
+        if (item[0] == "_" && item != "_") {
+        var _item = item.substr(1); 
+    
 __p+='\n        <optgroup label="'+
 ((__t=( _item ))==null?'':__t)+
 '">\n    ';
  } else if (item == "_") { 
 __p+='\n        </optgroup>\n    ';
- } else { 
-__p+='\n    ';
- var _itemvals = item.split("|");
-__p+='\n    ';
- var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):("");
-__p+='\n    ';
- var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1);
-__p+='\n    ';
- var selected = (value && item1 && value == item1)?("selected"):(""); 
+ 
+    } else { 
+    var _itemvals = item.split("|");
+    var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):("");
+    var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1);
+    var selected = (value && item1 && value == item1)?("selected"):(""); 
+    
 __p+='\n        <option value="'+
 ((__t=( item1 ))==null?'':__t)+
 '" '+
@@ -227,20 +227,19 @@ __p+='\n    ';
  if (_items.length != 0) { 
 __p+='\n    <div class="list-group" '+
 ((__t=( _control_id ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
 '>\n    ';
- for(var count=0;count<_items.length;count++) { 
-__p+='\n        ';
- var item = _items[count]; 
-__p+='\n\n        ';
- var _itemvals = item.split("|"); 
-__p+='\n        ';
- var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):(""); 
-__p+='\n        ';
- var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1); 
-__p+='\n        ';
- var valindex = $.inArray(item1, _values); 
-__p+='\n        ';
- var checked = (valindex != -1 && _values[valindex] == item1)?("checked"):(""); 
+ 
+    for(var count=0;count<_items.length;count++) {
+        var item = _items[count];
+        var _itemvals = item.split("|");
+        var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):("");
+        var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1);
+        var valindex = $.inArray(item1, _values);
+        var checked = (valindex != -1 && _values[valindex] == item1)?("checked"):("");
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.checked);" onload="var _val=this.getAttribute(`data-value`);this.checked=(_val && _val == `true`)?(true):(false);" ');
+    
 __p+='\n\n        <div class="'+
 ((__t=( _class ))==null?'':__t)+
 '">\n            <input type="checkbox" name="'+
@@ -248,6 +247,8 @@ __p+='\n\n        <div class="'+
 '" value="'+
 ((__t=( item1 ))==null?'':__t)+
 '" '+
+((__t=( _onchange ))==null?'':__t)+
+' '+
 ((__t=( checked ))==null?'':__t)+
 '><span> '+
 ((__t=( item2 ))==null?'':__t)+
@@ -265,18 +266,18 @@ __p+='\n    ';
  if (_items.length) { 
 __p+='\n    <div class="list-group" '+
 ((__t=( _control_id ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
 '>\n    ';
- for(var count=0;count<_items.length;count++) { 
-__p+='\n        ';
- var item = _items[count]; 
-__p+='\n\n        ';
- var _itemvals = item.split("|"); 
-__p+='\n        ';
- var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):(""); 
-__p+='\n        ';
- var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1); 
-__p+='\n        ';
- var checked = (_value == item1)?("checked"):(""); 
+ 
+    for(var count=0;count<_items.length;count++) {
+        var item = _items[count];
+        var _itemvals = item.split("|");
+        var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):("");
+        var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1);
+        var checked = (_value == item1)?("checked"):("");
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.checked);" onload="var _val=this.getAttribute(`data-value`);this.checked=(_val && _val == `true`)?(true):(false);" ');
+    
 __p+='\n\n        <div class="'+
 ((__t=( _class ))==null?'':__t)+
 '">\n            <input type="radio" name="'+
@@ -284,6 +285,8 @@ __p+='\n\n        <div class="'+
 '" value="'+
 ((__t=( item1 ))==null?'':__t)+
 '" '+
+((__t=( _onchange ))==null?'':__t)+
+' '+
 ((__t=( checked ))==null?'':__t)+
 '><span> '+
 ((__t=( item2 ))==null?'':__t)+
@@ -313,7 +316,9 @@ __p+='\n    <div class="thumbnail">\n        <img class="img-thumbnail" '+
 ((__t=( _img_style ))==null?'':__t)+
 '>\n        <div class="caption '+
 ((__t=( _control_grid ))==null?'':__t)+
-'">\n            <input name="'+
+'" '+
+((__t=( _title ))==null?'':__t)+
+'>\n            <input name="'+
 ((__t=( _name ))==null?'':__t)+
 '" type="file" class="'+
 ((__t=( _class ))==null?'':__t)+
@@ -347,6 +352,8 @@ __p+='\n    ';
     var _format = (format)?(format):("dd/mm/yyyy");
     var _datewidget_id = (control_id)?(control_id + "_001"):("");
     
+__p+='\n    ';
+ var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.value);" onload="this.value=this.getAttribute(`data-value`);" '); 
 __p+='\n    <div class="'+
 ((__t=( _class ))==null?'':__t)+
 ' '+
@@ -357,9 +364,13 @@ __p+='\n    <div class="'+
 ((__t=( _style ))==null?'':__t)+
 '> \n      <input name="'+
 ((__t=( _name ))==null?'':__t)+
-'" type="text" class="form-control" value="'+
+'" type="text" class="form-control" '+
 ((__t=( _value ))==null?'':__t)+
-'" '+
+' '+
+((__t=( _onchange ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
+' '+
 ((__t=( _placeholder ))==null?'':__t)+
 ' '+
 ((__t=( _control_id ))==null?'':__t)+
@@ -371,15 +382,19 @@ __p+='\n    <div class="'+
  // Submit Button 
 __p+='\n';
  } else if (_type == "submit") { 
+__p+='\n    ';
+ var _value = (value)?(value):("Submit"); 
 __p+='\n    <input class="'+
 ((__t=( _class ))==null?'':__t)+
 '" type="submit" name="'+
 ((__t=( _name ))==null?'':__t)+
-'" '+
+'"  '+
+((__t=( _title ))==null?'':__t)+
+' '+
 ((__t=( _control_id ))==null?'':__t)+
-' value="'+
+' '+
 ((__t=( _value ))==null?'':__t)+
-'" '+
+' '+
 ((__t=( _style ))==null?'':__t)+
 '>\n';
   } 
@@ -391,7 +406,9 @@ __p+='\n<div class="'+
 ((__t=( _label_class ))==null?'':__t)+
 ' '+
 ((__t=( _cont_grid ))==null?'':__t)+
-'" '+
+'"  '+
+((__t=( _title ))==null?'':__t)+
+' '+
 ((__t=( _control_id ))==null?'':__t)+
 ' '+
 ((__t=( _style ))==null?'':__t)+

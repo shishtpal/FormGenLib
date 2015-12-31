@@ -47,10 +47,12 @@ GenerateForm.prototype = {
 		this.control_class = "";
 		this.title = "";
 		this.control_id = "";
+		this.control_id0 = ""; // private
 		this.type = "";
 		this.type_name = "";
 		this.name = "";
 		this.value = "";
+		this.value0 = ""; // private
 		this.style = "";
 		this.autocomplete = "";
 		this.placeholder = "";
@@ -69,6 +71,8 @@ GenerateForm.prototype = {
 	    // Date widget
 	    this.position = "";
 		this.format = "";
+		// Events
+		this.onchange = "";
 	},
     /*
     * Want to Change Some Default Configuration Options 
@@ -123,7 +127,7 @@ GenerateForm.prototype = {
 
 	generateGridClass: function(gridArray) {
 		var _class="";
-		var screens = ["col-xs-", "col-md-", "col-sm-", "col-lg-"]; 
+		var screens = ["col-xs-", "col-sm-", "col-md-", "col-lg-"]; 
 		for(var count=0;count<gridArray.length;count++){ 
 		_class += screens[count] + gridArray[count] + " "; 
 		}
@@ -135,14 +139,32 @@ GenerateForm.prototype = {
 		var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 		with(obj||{}){
 		__p+='';
+
 		var _form_id = (id)?(id):("");
-		var _form_style = (style)?(style):("");
+		var _form_key = (form_key)?(form_key):("myForm");
 		var _form_action = (action)?(action):("/");
 		var _form_method = (method)?(method):("GET");
 		var _form_label = (caption)?(caption):("");
+		var _form_style = (style)?(' style="'+ style +'" '):("");
 		var _schema = (schema && $.isArray(schema))?(schema):([]);
 
-		__p+='<form action="'+((__t=( _form_action ))==null?'':__t)+'" method="'+((__t=( _form_method ))==null?'':__t)+'" id="'+((__t=( _form_id ))==null?'':__t)+'" style="'+((__t=( _form_style ))==null?'':__t)+'" accept-charset="utf-8"><fieldset><legend>'+((__t=( _form_label ))==null?'':__t)+'</legend></fieldset></form>';		}
+		__p+='<form action="'+
+		((__t=( _form_action ))==null?'':__t)+
+		'" method="'+
+		((__t=( _form_method ))==null?'':__t)+
+		'" id="'+
+		((__t=( _form_id ))==null?'':__t)+ '"' +
+		((__t=( _form_style ))==null?'':__t) +
+		' accept-charset="utf-8"><fieldset><legend>'+
+		((__t=( _form_label ))==null?'':__t)+
+		'<div class="btn-group" style="float: right;"><div data-formlib-key="'+
+		((__t=( _form_key ))==null?'':__t)+
+		'" onclick="$(this).trigger(`formlib:clean`);" class="btn btn-primary btn-sm formlib_load_clean"><span class="glyphicon glyphicon-refresh"></span> Clean</div><div data-formlib-key="'+
+		((__t=( _form_key ))==null?'':__t)+
+		'" onclick="$(this).trigger(`formlib:load`);" class="btn btn-info btn-sm formlib_load_saved"><span class="glyphicon glyphicon-open"></span> Load</div><div data-formlib-key="'+
+		((__t=( _form_key ))==null?'':__t)+
+		'" onclick="$(this).trigger(`formlib:save`);" class="btn btn-warning btn-sm formlib_save_current"><span class="glyphicon glyphicon-save"></span> Save</div></div>\n</legend></fieldset>\n</form>';
+		}
 		return __p;
 	},
 
@@ -157,10 +179,8 @@ GenerateForm.prototype = {
     /* Underscore - pre-compiled Template */
     generate: function() {
     	var obj = this;
-
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='';
 var _cont_grid = (cont_grid)?(this.generateGridClass(cont_grid)):("");
 var _cont_class = (cont_class)?(cont_class):("");
 var _cont_style = (cont_style)?(' style="' + cont_style + '" '):("");
@@ -168,15 +188,16 @@ var _label = (label)?(label):("__LABEL__");
 var _label_class = (label_class)?(label_class):("");
 var _type = (type)?(type):("__TYPE__");
 var _name = (name)?(name):("__NAME__");
-var _title = (title)?(title):("");
-var _value = (value)?(value):("");
-var _style = (style)?(' style="' + style + '" '):("");
+var _title = (title)?(' title="'+title+'" '):("");
+var _value = (value)?(' value="'+value+'" '):("");
+var _value0 = (value)?(value):("");
+var _style = (style)?(' style="'+style+'" '):("");
 var _placeholder = (placeholder)?(' placeholder="' + placeholder + '" '):("");
 var _label_grid = (label_grid)?( this.generateGridClass(label_grid) ):("");
 var _control_grid = (control_grid)?( this.generateGridClass(control_grid) ):("");
 var _control_class = (control_class)?(control_class):("");
-var _control_id = (control_id)?(' id="' + control_id + '" '):("");
-var _control_id0 = (control_id)?("#" + control_id):("");
+var _control_id = (control_id)?(' id="'+control_id+'" '):("");
+var _control_id0 = (control_id)?("#"+control_id):("");
 
 var _class=_control_class;
 if (_type=="text") { 
@@ -221,10 +242,8 @@ __p+='\n';
 __p+='\n    <label for="'+
 ((__t=( _name ))==null?'':__t)+
 '" class="control-label '+
-((__t=( _label_class ))==null?'':__t)+
-' '+
-((__t=( _label_grid ))==null?'':__t)+
-'">'+
+((__t=( _label_class + _label_grid ))==null?'':__t)+
+'"> '+
 ((__t=( _label ))==null?'':__t)+
 '</label>\n';
  } 
@@ -233,7 +252,19 @@ __p+='\n\n';
 __p+='\n';
  if (_type == "text" || _type == "file" || _type == "radio" || _type == "checkbox") { 
 __p+='\n    ';
- var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" '); 
+ 
+    var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" ');
+    if (_type == "text") {
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.value);" onload="this.value=this.getAttribute(`data-value`);" '); 
+    } else if (_type == "radio") {
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.checked);" onload="var _val=this.getAttribute(`data-value`);this.checked=(_val && _val == `true`)?(true):(false);" '); 
+    } else if (_type == "checkbox") {
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.checked);" onload="var _val=this.getAttribute(`data-value`);this.checked=(_val && _val == `true`)?(true):(false);" '); 
+    } else {
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(''); 
+    }
+
+    
 __p+='\n    <input type="'+
 ((__t=( _type ))==null?'':__t)+
 '" class="'+
@@ -241,25 +272,22 @@ __p+='\n    <input type="'+
 ' '+
 ((__t=( _control_grid ))==null?'':__t)+
 '" '+
-((__t=( _control_id ))==null?'':__t)+
+((__t=( _control_id + _onchange ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
 ' name="'+
 ((__t=( _name ))==null?'':__t)+
-'" value="'+
-((__t=( _value ))==null?'':__t)+
 '" '+
-((__t=( _placeholder ))==null?'':__t)+
-' '+
-((__t=( _autocomplete ))==null?'':__t)+
-' '+
-((__t=( _style ))==null?'':__t)+
+((__t=( _value + _placeholder + _autocomplete + _style ))==null?'':__t)+
 '>\n\n';
  // General Control - When You need a Custom Type Input Control 
 __p+='\n';
  } else if (_type == "general") { 
 __p+='\n    ';
- var _type_name = (type_name)?(' type="' + type_name + '" '):(' type="text" '); 
-__p+='\n    ';
- var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" '); 
+ 
+    var _type_name = (type_name)?(' type="' + type_name + '" '):(' type="text" ');
+    var _autocomplete = (autocomplete)?(' autocomplete="on" '):(' autocomplete="off" ');
+    
 __p+='\n    <input type="'+
 ((__t=( _type_name ))==null?'':__t)+
 '" class="'+
@@ -268,16 +296,12 @@ __p+='\n    <input type="'+
 ((__t=( _control_grid ))==null?'':__t)+
 '" '+
 ((__t=( _control_id ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
 ' name="'+
 ((__t=( _name ))==null?'':__t)+
-'" value="'+
-((__t=( _value ))==null?'':__t)+
 '" '+
-((__t=( _placeholder ))==null?'':__t)+
-' '+
-((__t=( _autocomplete ))==null?'':__t)+
-' '+
-((__t=( _style ))==null?'':__t)+
+((__t=( _value + _placeholder + _autocomplete + _style ))==null?'':__t)+
 '>\n\n';
  } else if (_type == "password") { 
 __p+='\n    ';
@@ -288,22 +312,21 @@ __p+='\n    <input type="password" class="'+
 ((__t=( _control_grid ))==null?'':__t)+
 '" '+
 ((__t=( _control_id ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
 ' name="'+
 ((__t=( _name ))==null?'':__t)+
-'" value="'+
-((__t=( _value ))==null?'':__t)+
 '" '+
-((__t=( _placeholder ))==null?'':__t)+
-' '+
-((__t=( _autocomplete ))==null?'':__t)+
-' '+
-((__t=( _style ))==null?'':__t)+
+((__t=( _value + _placeholder + _autocomplete + _style ))==null?'':__t)+
 '>\n\n';
  // Textarea widget 
 __p+='\n';
  } else if (_type == "textarea") { 
 __p+='\n    ';
- var _rows = (rows)?(' rows="' + rows + '" '):(' rows="5" '); 
+ 
+    var _rows = (rows)?(' rows="' + rows + '" '):(' rows="5" '); 
+    var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.value);" onload="this.value=this.getAttribute(`data-value`);" '); 
+    
 __p+='\n    <textarea class="'+
 ((__t=( _class ))==null?'':__t)+
 ' '+
@@ -311,13 +334,7 @@ __p+='\n    <textarea class="'+
 '" name="'+
 ((__t=( _name ))==null?'':__t)+
 '" '+
-((__t=( _control_id ))==null?'':__t)+
-' '+
-((__t=( _rows ))==null?'':__t)+
-' '+
-((__t=( _placeholder ))==null?'':__t)+
-' '+
-((__t=( _style ))==null?'':__t)+
+((__t=( _control_id + _title + _rows + _placeholder + _style + _onchange ))==null?'':__t)+
 '>'+
 ((__t=( _value ))==null?'':__t)+
 '</textarea>\n\n';
@@ -325,9 +342,11 @@ __p+='\n    <textarea class="'+
 __p+='\n';
  } else if (_type == "select") { 
 __p+='\n    ';
- var _multiple = (multiple)?('multiple="true"'):(""); 
-__p+='\n    ';
- var _items = (items)?(items):([]); 
+ 
+    var _multiple = (multiple)?('multiple="true"'):("");
+    var _items = (items)?(items):([]);
+    var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.value);" onload="this.value=this.getAttribute(`data-value`);" ');
+    
 __p+='\n\n    <select name="'+
 ((__t=( _name ))==null?'':__t)+
 '" class="'+
@@ -335,33 +354,34 @@ __p+='\n\n    <select name="'+
 ' '+
 ((__t=( _control_grid ))==null?'':__t)+
 '" '+
+((__t=( _onchange ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
+' '+
 ((__t=( _control_id ))==null?'':__t)+
 ' '+
 ((__t=( _style ))==null?'':__t)+
 ' '+
 ((__t=( _multiple ))==null?'':__t)+
 '>\n    ';
- for(var count=0;count<_items.length;count++) { 
-__p+='\n    ';
- var item = _items[count]; 
-__p+='\n    ';
- if (item[0] == "_" && item != "_") { 
-__p+='\n    ';
- var _item = item.substr(1); 
+ 
+    for(var count=0;count<_items.length;count++) {
+        var item = _items[count];
+        if (item[0] == "_" && item != "_") {
+        var _item = item.substr(1); 
+    
 __p+='\n        <optgroup label="'+
 ((__t=( _item ))==null?'':__t)+
 '">\n    ';
  } else if (item == "_") { 
 __p+='\n        </optgroup>\n    ';
- } else { 
-__p+='\n    ';
- var _itemvals = item.split("|");
-__p+='\n    ';
- var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):("");
-__p+='\n    ';
- var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1);
-__p+='\n    ';
- var selected = (value && item1 && value == item1)?("selected"):(""); 
+ 
+    } else { 
+    var _itemvals = item.split("|");
+    var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):("");
+    var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1);
+    var selected = (value && item1 && value == item1)?("selected"):(""); 
+    
 __p+='\n        <option value="'+
 ((__t=( item1 ))==null?'':__t)+
 '" '+
@@ -384,20 +404,19 @@ __p+='\n    ';
  if (_items.length != 0) { 
 __p+='\n    <div class="list-group" '+
 ((__t=( _control_id ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
 '>\n    ';
- for(var count=0;count<_items.length;count++) { 
-__p+='\n        ';
- var item = _items[count]; 
-__p+='\n\n        ';
- var _itemvals = item.split("|"); 
-__p+='\n        ';
- var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):(""); 
-__p+='\n        ';
- var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1); 
-__p+='\n        ';
- var valindex = $.inArray(item1, _values); 
-__p+='\n        ';
- var checked = (valindex != -1 && _values[valindex] == item1)?("checked"):(""); 
+ 
+    for(var count=0;count<_items.length;count++) {
+        var item = _items[count];
+        var _itemvals = item.split("|");
+        var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):("");
+        var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1);
+        var valindex = $.inArray(item1, _values);
+        var checked = (valindex != -1 && _values[valindex] == item1)?("checked"):("");
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.checked);" onload="var _val=this.getAttribute(`data-value`);this.checked=(_val && _val == `true`)?(true):(false);" ');
+    
 __p+='\n\n        <div class="'+
 ((__t=( _class ))==null?'':__t)+
 '">\n            <input type="checkbox" name="'+
@@ -405,6 +424,8 @@ __p+='\n\n        <div class="'+
 '" value="'+
 ((__t=( item1 ))==null?'':__t)+
 '" '+
+((__t=( _onchange ))==null?'':__t)+
+' '+
 ((__t=( checked ))==null?'':__t)+
 '><span> '+
 ((__t=( item2 ))==null?'':__t)+
@@ -422,18 +443,18 @@ __p+='\n    ';
  if (_items.length) { 
 __p+='\n    <div class="list-group" '+
 ((__t=( _control_id ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
 '>\n    ';
- for(var count=0;count<_items.length;count++) { 
-__p+='\n        ';
- var item = _items[count]; 
-__p+='\n\n        ';
- var _itemvals = item.split("|"); 
-__p+='\n        ';
- var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):(""); 
-__p+='\n        ';
- var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1); 
-__p+='\n        ';
- var checked = (_value == item1)?("checked"):(""); 
+ 
+    for(var count=0;count<_items.length;count++) {
+        var item = _items[count];
+        var _itemvals = item.split("|");
+        var item1 = (_itemvals && _itemvals[0])?(_itemvals[0]):("");
+        var item2 = (_itemvals && _itemvals[1])?(_itemvals[1]):(item1);
+        var checked = (_value == item1)?("checked"):("");
+        var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.checked);" onload="var _val=this.getAttribute(`data-value`);this.checked=(_val && _val == `true`)?(true):(false);" ');
+    
 __p+='\n\n        <div class="'+
 ((__t=( _class ))==null?'':__t)+
 '">\n            <input type="radio" name="'+
@@ -441,6 +462,8 @@ __p+='\n\n        <div class="'+
 '" value="'+
 ((__t=( item1 ))==null?'':__t)+
 '" '+
+((__t=( _onchange ))==null?'':__t)+
+' '+
 ((__t=( checked ))==null?'':__t)+
 '><span> '+
 ((__t=( item2 ))==null?'':__t)+
@@ -470,7 +493,9 @@ __p+='\n    <div class="thumbnail">\n        <img class="img-thumbnail" '+
 ((__t=( _img_style ))==null?'':__t)+
 '>\n        <div class="caption '+
 ((__t=( _control_grid ))==null?'':__t)+
-'">\n            <input name="'+
+'" '+
+((__t=( _title ))==null?'':__t)+
+'>\n            <input name="'+
 ((__t=( _name ))==null?'':__t)+
 '" type="file" class="'+
 ((__t=( _class ))==null?'':__t)+
@@ -504,6 +529,8 @@ __p+='\n    ';
     var _format = (format)?(format):("dd/mm/yyyy");
     var _datewidget_id = (control_id)?(control_id + "_001"):("");
     
+__p+='\n    ';
+ var _onchange = (onchange)?(' onchange="' + onchange + '" '):(' onchange="this.setAttribute(`data-value`, this.value);" onload="this.value=this.getAttribute(`data-value`);" '); 
 __p+='\n    <div class="'+
 ((__t=( _class ))==null?'':__t)+
 ' '+
@@ -514,9 +541,13 @@ __p+='\n    <div class="'+
 ((__t=( _style ))==null?'':__t)+
 '> \n      <input name="'+
 ((__t=( _name ))==null?'':__t)+
-'" type="text" class="form-control" value="'+
+'" type="text" class="form-control" '+
 ((__t=( _value ))==null?'':__t)+
-'" '+
+' '+
+((__t=( _onchange ))==null?'':__t)+
+' '+
+((__t=( _title ))==null?'':__t)+
+' '+
 ((__t=( _placeholder ))==null?'':__t)+
 ' '+
 ((__t=( _control_id ))==null?'':__t)+
@@ -528,16 +559,19 @@ __p+='\n    <div class="'+
  // Submit Button 
 __p+='\n';
  } else if (_type == "submit") { 
- 	var _value = (value)?(value):("Submit");
+__p+='\n    ';
+ var _value = (value)?(value):("Submit"); 
 __p+='\n    <input class="'+
 ((__t=( _class ))==null?'':__t)+
 '" type="submit" name="'+
 ((__t=( _name ))==null?'':__t)+
-'" '+
+'"  '+
+((__t=( _title ))==null?'':__t)+
+' '+
 ((__t=( _control_id ))==null?'':__t)+
-' value="'+
+' '+
 ((__t=( _value ))==null?'':__t)+
-'" '+
+' '+
 ((__t=( _style ))==null?'':__t)+
 '>\n';
   } 
@@ -549,7 +583,9 @@ __p+='\n<div class="'+
 ((__t=( _label_class ))==null?'':__t)+
 ' '+
 ((__t=( _cont_grid ))==null?'':__t)+
-'" '+
+'"  '+
+((__t=( _title ))==null?'':__t)+
+' '+
 ((__t=( _control_id ))==null?'':__t)+
 ' '+
 ((__t=( _style ))==null?'':__t)+
@@ -584,8 +620,9 @@ return __p;
 			// No need to process
 			console.log("* -  Loading Form from LocalStorage");
 			this.parent.append(localStorage[this.form_key + "_asnew"]);
+			this.parent.trigger("formlib:local");
 		} else {
-			console.log("* - Injecting Main Form");
+			console.log("* - Injecting Main Form (injectFormCompAsNew method)");
 			this.injectMainForm();
 			for(var count=0;count<this.schema.length;count++) {
 				var schemaChild = this.schema[count];
@@ -597,14 +634,49 @@ return __p;
 				this.config(schemaChild);
 				this.form.append(this.generate());
 			}
-
 			localStorage.setItem("isClean", "true");
 			// re-render Form
 			localStorage.setItem(this.form_key+"_asnew", this.parent.html());
+			this.parent.trigger("formlib:done");
 		}
 		return this;
-	}
+	},
 
+	listen: function() {
+		var self = this;
+		this.parent.on("formlib:clean", function(ev){
+			// load a Clean form - re-render it - don't load from LocalStorage
+			localStorage.clear();
+			console.log("* - Force Re-Render Full Form (listen method)");
+			self.parent.trigger("formlib:cleaned");
+		});
+		this.parent.on("formlib:load", function(ev){
+			// console.log(ev);
+			var _this = $(ev.target);
+			var _form_key = _this.attr("data-formlib-key");
+			var _save_form_key = _form_key + "_saved";
+			var _html = localStorage[_save_form_key];
+			if (_html && _html != null && _html != "") {
+				self.parent.html(_html);
+				console.log("* - Form had been loaded from LocalStorage..");
+				$("input, select, file, textarea", self.parent).trigger("load");
+			} else {
+				console.log("* - Fail to load Form from LocalStorage..");
+			}
+			self.parent.trigger("formlib:loaded");
+		});
+		this.parent.on("formlib:save", function(ev){
+			// console.log(ev);
+			var _this = $(ev.target);
+			var _form_key = _this.attr("data-formlib-key");
+			var _save_form_key = _form_key + "_saved";
+			// form is good to go .. Form State had been saved ..
+			localStorage.setItem(_save_form_key, self.parent.html());
+			// Form rendering is done ...
+			self.parent.trigger("formlib:saved");
+			console.log("* - Form had been Saved ..");
+		});
+	}
 
 }
 

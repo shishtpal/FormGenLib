@@ -152,5 +152,7 @@ i.injectFormCompAsNew();
     - Define form layout and then inject form components into defiend grid positions
 * So far, all we want to do is generate HTML Form ..
 
-
+* `onchange` event handler to Momorize form State 
+* Memorize form State
+* Custom Form Handler Toolbar (to reload, to re-render, to save)
 
